@@ -1,0 +1,59 @@
+import Masonry from "react-masonry-css";
+import Image from "next/image";
+import LightGallery from "lightgallery/react";
+
+// Plugins
+import lgThumbnail from "lightgallery/plugins/thumbnail";
+import lgZoom from "lightgallery/plugins/zoom";
+import { useRef } from "react";
+// css style
+import "lightgallery/css/lightgallery.css";
+import "lightgallery/css/lg-zoom.css";
+import "lightgallery/css/lg-thumbnail.css";
+
+const breakpointColumnsObj = {
+  default: 3,
+  1100: 2,
+  700: 1
+};
+
+export default function Gallery({ photos }) {
+  let lightGallery = useRef(null);
+  return (
+    <div>
+      <Masonry
+        className="flex w-auto gap-9 px-4 "
+        breakpointCols={breakpointColumnsObj}
+      >
+        {photos.map((photo, idx) => (
+          <Image
+            key={idx}
+            src={photo}
+            alt="photo"
+            className="mb-9  hover:opacity-80 cursor-pointer"
+            placeholder="blur"
+            onClick={() => {
+              lightGallery.current.openGallery(idx);
+            }}
+          />
+        ))}
+      </Masonry>
+      {
+        <LightGallery
+          onInit={ref => {
+            if (ref) {
+              lightGallery.current = ref.instance;
+            }
+          }}
+          speed={500}
+          plugins={[lgThumbnail, lgZoom]}
+          dynamic
+          dynamicEl={photos.map(photo => ({
+            src: photo.src,
+            thumb: photo.src
+          }))}
+        />
+      }
+    </div>
+  );
+}
