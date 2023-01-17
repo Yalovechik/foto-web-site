@@ -17,7 +17,7 @@ const breakpointColumnsObj = {
   700: 1
 };
 
-export default function Gallery({ photos }) {
+export default function Gallery({ allImages }) {
   let lightGallery = useRef(null);
   return (
     <div>
@@ -25,13 +25,15 @@ export default function Gallery({ photos }) {
         className="flex w-auto gap-9 px-4 "
         breakpointCols={breakpointColumnsObj}
       >
-        {photos.map((photo, idx) => (
+        {allImages.map((photo, idx) => (
           <Image
+            src={photo.url}
+            width={photo.width}
+            height={photo.height}
             key={idx}
-            src={photo}
             alt="photo"
-            className="mb-9  hover:opacity-80 cursor-pointer"
             placeholder="blur"
+            blurDataURL={photo.url}
             onClick={() => {
               lightGallery.current.openGallery(idx);
             }}
@@ -48,9 +50,9 @@ export default function Gallery({ photos }) {
           speed={500}
           plugins={[lgThumbnail, lgZoom]}
           dynamic
-          dynamicEl={photos.map(photo => ({
-            src: photo.src,
-            thumb: photo.src
+          dynamicEl={allImages.map(({ url }) => ({
+            src: url,
+            thumb: url
           }))}
         />
       }

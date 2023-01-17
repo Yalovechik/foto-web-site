@@ -1,23 +1,16 @@
 import { AiOutlineClose } from "react-icons/ai";
 import { TbMenu } from "react-icons/tb";
-
-import icons from "../pages/materials";
-
 import Head from "next/head";
 import { Inter } from "@next/font/google";
-import Tabs from "./Tabs";
-
-import allImages from "./photo";
+// import allImages from "./photo";
 import { useState } from "react";
-
+import ImgKitService from "../services/imgKitService";
+import Footer from "../components/Footer";
+import TabGroup from "../components/Tabs";
 const inter = Inter({ subsets: ["latin"] });
 
-const firstPhoto = allImages.slice(0, allImages.length / 2);
-const secondPhoto = allImages.slice(firstPhoto.length, allImages.length + 1);
-
-export default function Home() {
+export default function Home({ mappedPhoto }) {
   const [toggleMenu, setToggleMenu] = useState(false);
-
   return (
     <div className="h-full overflow-auto">
       <Head>
@@ -43,29 +36,38 @@ export default function Home() {
           </div>
         </div>
       </header>
+
       <main className=" md:pt-[30px] ">
-        <div>
-          <Tabs
-            allImages={allImages}
-            firstPhoto={firstPhoto}
-            secondPhoto={secondPhoto}
-            toggleMenu={toggleMenu}
-          />
-        </div>
+        <TabGroup toggleMenu={toggleMenu} photos={mappedPhoto} />
       </main>
-      <footer className="h-[100px] mb-5 flex items-center justify-center relative">
-        <div className="absolute w-100  flex justify-center  gap-2 text-2xl z-20">
-          {icons.map((icon, idx) => (
-            <div
-              key={idx}
-              className="border-2 border-slate-800 rounded-full p-2 md:p-3 bg-slate-50"
-            >
-              {icon}
-            </div>
-          ))}
-        </div>
-        <div className="w-full border border-b-slate-800 opacity-30"></div>
-      </footer>
+
+      <Footer />
     </div>
   );
+}
+
+export async function getServerSideProps() {
+  let photos = [];
+  try {
+    const imgKitService = new ImgKitService();
+    const response = await imgKitService.getAllPhotos();
+
+    photos = response
+      .filter(item => item.filePath.split("/").length > 2)
+      .map(({ url, height, width, filePath }) => ({
+        url,
+        height,
+        width,
+        folder: filePath.split("/")[1],
+        orientationHorizontal: height < width
+      }));
+  } catch (error) {
+    console.log(error);
+  }
+
+  return {
+    props: {
+      mappedPhoto: photos
+    }
+  };
 }

@@ -1,6 +1,6 @@
 import "../styles/globals.css";
 import { Syne } from "@next/font/google";
-import { ThemeProvider } from "./ThemeContex";
+import { ThemeProvider } from "../components/theme/ThemeContex";
 
 const syne = Syne({
   subsets: ["latin"],

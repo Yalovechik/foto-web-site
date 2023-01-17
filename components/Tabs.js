@@ -1,18 +1,13 @@
-import Gallery from "./Gallery";
 import { Tab } from "@headlessui/react";
+import Gallery from "./Gallery";
 
 const tabs = [
-  { key: "all photos", display: "all photos" },
-  { key: "photo1", display: "photo1" },
-  { key: "photo2", display: "photo2" }
+  { key: "Photo-1", display: "Photo-1" },
+  { key: "Photo-2", display: "Photo-2" },
+  { key: "Photo-3", display: "Photo-3" }
 ];
 
-export default function tabGroup({
-  allImages,
-  firstPhoto,
-  secondPhoto,
-  toggleMenu
-}) {
+export default function TabGroup({ photos, toggleMenu }) {
   return (
     <div className="flex flex-col items-center w-full  ">
       <Tab.Group>
@@ -29,21 +24,24 @@ export default function tabGroup({
                 <span
                   className={
                     selected
-                      ? "bg-blue-500 text-white p-3 "
+                      ? "bg-blue-200 text-white p-3 "
                       : "bg-white text-black"
                   }
                 >
-                  All
+                  {tab.display}
                 </span>
               )}
-              {tab.display}
             </Tab>
           ))}
         </Tab.List>
         <Tab.Panels className="h-full max-w-[1500px]  w-full p-3 my-6">
-          <Tab.Panel>{<Gallery photos={allImages} />}</Tab.Panel>
-          <Tab.Panel>{<Gallery photos={firstPhoto} />}</Tab.Panel>
-          <Tab.Panel>{<Gallery photos={secondPhoto} />}</Tab.Panel>
+          {tabs.map(tab => (
+            <Tab.Panel key={tab.key}>
+              <Gallery
+                allImages={photos.filter(photo => photo.folder === tab.key)}
+              />
+            </Tab.Panel>
+          ))}
         </Tab.Panels>
       </Tab.Group>
     </div>
