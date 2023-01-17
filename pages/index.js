@@ -7,10 +7,12 @@ import { useState } from "react";
 import ImgKitService from "../services/imgKitService";
 import Footer from "../components/Footer";
 import TabGroup from "../components/Tabs";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home({ mappedPhoto }) {
   const [toggleMenu, setToggleMenu] = useState(false);
+
   return (
     <div className="h-full overflow-auto">
       <Head>
@@ -20,7 +22,7 @@ export default function Home({ mappedPhoto }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <header className=" h-[70px] z-10">
+      <header className=" h-[70px] z-10 ">
         <div className="h-full w-full flex justify-between items-center px-5 ">
           <div className=" gap-1 text-4xl opacity-0 hidden md:flex"></div>
           <h2 className="text-2xl uppercase tracking-semibold">senorita</h2>
@@ -36,11 +38,9 @@ export default function Home({ mappedPhoto }) {
           </div>
         </div>
       </header>
-
       <main className=" md:pt-[30px] ">
         <TabGroup toggleMenu={toggleMenu} photos={mappedPhoto} />
       </main>
-
       <Footer />
     </div>
   );
