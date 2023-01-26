@@ -76,7 +76,7 @@ export async function getServerSideProps() {
   }
 
 // to test conflict
-// added comment by MYKOL
+// added comment by MYKOLA
 
   return {
     props: {
