@@ -34,7 +34,7 @@ export default function Gallery({ allImages }) {
             key={idx}
             alt="photo"
             placeholder="blur"
-            blurDataURL={photo.url}
+            blurDataURL={photo.dataUrl}
             onClick={() => {
               lightGallery.current.openGallery(idx);
             }}

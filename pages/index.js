@@ -7,6 +7,7 @@ import { useState } from "react";
 import ImgKitService from "../services/imgKitService";
 import Footer from "../components/Footer";
 import TabGroup from "../components/Tabs";
+import lqip from "lqip-modern";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -47,6 +48,7 @@ export default function Home({ mappedPhoto }) {
 }
 
 export async function getServerSideProps() {
+  let mappedPhotoUrl = []
   let photos = [];
   try {
     const imgKitService = new ImgKitService();
@@ -61,13 +63,28 @@ export async function getServerSideProps() {
         folder: filePath.split("/")[1],
         orientationHorizontal: height < width
       }));
+
+    const photoWithDataUrl = [];
+
+    for (const photo of photos) {
+      const dataUrl = await getDataUrl(photo.url);
+      photoWithDataUrl.push({ ...photo, dataUrl });
+    }
+    mappedPhotoUrl.push(...photoWithDataUrl);
   } catch (error) {
     console.log(error);
   }
 
   return {
     props: {
-      mappedPhoto: photos
+      mappedPhoto: mappedPhotoUrl
     }
   };
+}
+
+async function getDataUrl(url) {
+  const imgData = await fetch(url);
+  const arrayBufferData = await imgData.arrayBuffer();
+  const lqipData = await lqip(Buffer.from(arrayBufferData));
+  return lqipData.metadata.dataURIBase64;
 }
