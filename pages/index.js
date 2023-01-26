@@ -48,7 +48,7 @@ export default function Home({ mappedPhoto }) {
 }
 
 export async function getServerSideProps() {
-  let mappedPhotoUrl = []
+  let mappedPhotoUrl = [];
   let photos = [];
   try {
     const imgKitService = new ImgKitService();
