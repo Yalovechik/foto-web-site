@@ -74,7 +74,7 @@ export async function getServerSideProps() {
   } catch (error) {
     console.log(error);
   }
-
+// added comment by MYKOLA
   return {
     props: {
       mappedPhoto: mappedPhotoUrl
