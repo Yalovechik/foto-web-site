@@ -2,16 +2,11 @@ import { AiOutlineClose } from "react-icons/ai";
 import { TbMenu } from "react-icons/tb";
 import Head from "next/head";
 import { Inter } from "@next/font/google";
-// import allImages from "./photo";
 import { useState } from "react";
-import ImgKitService from "../services/imgKitService";
 import Footer from "../components/Footer";
 import TabGroup from "../components/Tabs";
-import lqip from "lqip-modern";
 import Logo from "../ux/logo/logo_seniorita.svg";
-
-
-
+import ImgService from "../services/imgService"
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,11 +21,10 @@ export default function Home({ mappedPhoto }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
+      
       <header className=" h-[70px] z-10 ">
         <div className="h-full w-full flex justify-between items-center px-5 ">
           <div className=" gap-1 text-4xl opacity-0 hidden md:flex"></div>
-         
           <div >
             <Logo className="w-12 h-12" />
           </div>
@@ -55,45 +49,14 @@ export default function Home({ mappedPhoto }) {
 }
 
 export async function getServerSideProps() {
-  let mappedPhotoUrl = [];
-  let photos = [];
-  try {
-    const imgKitService = new ImgKitService();
-    const response = await imgKitService.getAllPhotos();
-
-    photos = response
-      .filter(item => item.filePath.split("/").length > 2)
-      .map(({ url, height, width, filePath }) => ({
-        url,
-        height,
-        width,
-        folder: filePath.split("/")[1],
-        orientationHorizontal: height < width
-      }));
-
-    const photoWithDataUrl = [];
-
-    for (const photo of photos) {
-      const dataUrl = await getDataUrl(photo.url);
-      photoWithDataUrl.push({ ...photo, dataUrl });
-    }
-    mappedPhotoUrl.push(...photoWithDataUrl);
-  } catch (error) {
-    console.log(error);
-  }
-
-
+  const imgService = new ImgService();
+  const photos = await imgService.getCachePhotos();
 
   return {
     props: {
-      mappedPhoto: mappedPhotoUrl
+      mappedPhoto: photos
     }
   };
 }
 
-async function getDataUrl(url) {
-  const imgData = await fetch(url);
-  const arrayBufferData = await imgData.arrayBuffer();
-  const lqipData = await lqip(Buffer.from(arrayBufferData));
-  return lqipData.metadata.dataURIBase64;
-}
+
