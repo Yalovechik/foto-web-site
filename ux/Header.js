@@ -1,4 +1,7 @@
-export default function Header() {
+
+import { Image } from 'next/image';
+
+function Header() {
   return (
     <div className="bg-slate-200 h-min-40 flex">
       <div className="flex-initial w-32 tracking-wide">
@@ -10,7 +13,14 @@ export default function Header() {
       </div>
       <div className="flex-1">
         <div className="flex justify-between p-3 px-10">
-          <h2 className="text-3xl font-bold">HH</h2>
+          <div className="text-3xl font-bold">
+            {/* <Image
+              src="../ux/1.svg"
+              height={32}
+              width={32}
+              alt="Follow us on Twitter"
+            /> */}
+          </div>
           <div className="flex">
             <ul className="flex gap-3 mr-12 ">
               <li>Home</li>

@@ -8,6 +8,10 @@ import ImgKitService from "../services/imgKitService";
 import Footer from "../components/Footer";
 import TabGroup from "../components/Tabs";
 import lqip from "lqip-modern";
+import Logo from "../ux/logo/logo_seniorita.svg";
+
+
+
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,7 +30,10 @@ export default function Home({ mappedPhoto }) {
       <header className=" h-[70px] z-10 ">
         <div className="h-full w-full flex justify-between items-center px-5 ">
           <div className=" gap-1 text-4xl opacity-0 hidden md:flex"></div>
-          <h2 className="text-2xl uppercase tracking-semibold">senorita</h2>
+         
+          <div >
+            <Logo className="w-12 h-12" />
+          </div>
           <div
             onClick={() => setToggleMenu(!toggleMenu)}
             className="hover:opacity-80 cursor-pointer transition-all items-center w-5 md:opacity-0"
@@ -75,8 +82,7 @@ export async function getServerSideProps() {
     console.log(error);
   }
 
-// to test conflict
-// added comment by MYKOLA
+
 
   return {
     props: {
